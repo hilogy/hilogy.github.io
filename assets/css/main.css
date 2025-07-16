@@ -1,9 +1,8 @@
 html body {
-    background-color: #f7f7f7;
+    background: url("/assets/img/back_icon.png") center;
     margin: 0px;
-    font-family: "./assets/fonts/UbuntuMono-R.ttf";
+    font-family: url("/assets/fonts/UbuntuMono-R.ttf");
 }
-
 /*link_styles--------------------*/
 a:hover {
     margin: 4px;

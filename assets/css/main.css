@@ -31,7 +31,7 @@ a {
 nav {
     border-bottom: solid;
     border-width: 1px;
-    background-color: #ffffff;
+    background: rgba(255, 255, 255, 0.85);
     padding: 15px 0;
 }
 

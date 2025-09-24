@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/project.css">
+        <title>hilogy project</title>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <img src="../assets/img/hilogy_with_icon.png" alt="HiLogy">
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="../index.html">主页</a></li>
+                    <li><a href="/infmation.html">简介</a></li>
+                    <li><a href="" style="color: black;">项目&产品</a></li>
+                    <li><a href="/doc/index.html">文档</a></li>
+                    <li><a href="">合作</a></li>
+                </ul>
+        </nav>
+        <div id="proj-list">
+            <!--单个磁贴示例<a href="">
+                <div>
+                    <img src=""/>
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </a>-->
+
+        </div>
+    <script>
+        async function loadProjects() {
+            const projList = document.getElementById('proj-list');
+            
+            // 获取项目目录列表
+            try {
+                const response = await fetch('guide.txt');
+                if (!response.ok) {
+                    console.error('无法读取guide文件');
+                    return;
+                }
+                
+                const dirs = (await response.text()).split('\n').filter(Boolean);
+                
+                for (const dir of dirs) {
+                    try {
+                        // 从title文件获取标题和描述
+                        let title = '项目标题';
+                        let description = '项目描述';
+                        const titleRes = await fetch(`${dir}/title.txt`);
+                        if (titleRes.ok) {
+                            const content = (await titleRes.text()).trim();
+                            
+                            // 提取标题和描述
+                            const titleMatch = content.match(/^(.*?)(?:\[|$)/);
+                            if (titleMatch) {
+                                title = titleMatch[1].trim();
+                            }
+                            
+                            const descMatch = content.match(/\[([^\]]+)\]/);
+                            if (descMatch) {
+                                description = descMatch[1];
+                            }
+                        }
+                        
+                        // 创建磁贴元素
+                        const tile = document.createElement('a');
+                        tile.href = `${dir}/index.html`;
+                        tile.className = 'project-tile';
+                        
+                        const tileDiv = document.createElement('div');
+                        tileDiv.className = 'tile-content';
+                        
+                        // 图片容器
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'tile-image';
+                        
+                        // 检查图片是否存在
+                        const img = document.createElement('img');
+                        img.src = `${dir}/img.png`;
+                        img.alt = title;
+                        img.onerror = function() {
+                            // 图片加载失败时创建白色方块
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'image-placeholder';
+                            imgContainer.replaceChild(placeholder, img);
+                        };
+                        
+                        imgContainer.appendChild(img);
+                        
+                        // 标题
+                        const h3 = document.createElement('h3');
+                        h3.textContent = title;
+                        
+                        // 描述
+                        const p = document.createElement('p');
+                        p.textContent = description;
+                        
+                        tileDiv.appendChild(imgContainer);
+                        tileDiv.appendChild(h3);
+                        tileDiv.appendChild(p);
+                        tile.appendChild(tileDiv);
+                        projList.appendChild(tile);
+                        
+                    } catch (e) {
+                        console.error(`处理项目 ${dir} 失败:`, e);
+                    }
+                }
+            } catch (e) {
+                console.error('加载项目失败:', e);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadProjects);
+        } else {
+            loadProjects();
+        }
+    </script>
+</body>
+</html>

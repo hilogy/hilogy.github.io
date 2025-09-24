@@ -6,7 +6,7 @@
 }
 
 html, body {
-    background: url("/assets/video/sun.mp4") bottom;
+    background: url("/assets/img/back_icon.png") bottom;
     margin: 0px;
     font-family: 'UbuntuMono', monospace;
 }
